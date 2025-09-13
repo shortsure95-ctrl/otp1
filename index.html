@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Register & Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--accent:#0b63d6;--green:#43e97b;--muted:#6b7280}
+*{box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;margin:0;background:linear-gradient(135deg,#0f2027,#203a43);min-height:100vh;display:flex;align-items:center;justify-content:center;color:#fff;padding:20px}
+.container{width:980px;max-width:100%;display:grid;grid-template-columns:1fr;gap:18px}
+.card{background:rgba(255,255,255,0.04);padding:22px;border-radius:12px;backdrop-filter: blur(6px);border:1px solid rgba(255,255,255,0.06)}
+h2{margin:0 0 12px 0}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#fff;margin-bottom:12px}
+.btn{padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;background:linear-gradient(135deg,var(--green),#38f9d7);color:#012}
+.small{font-size:13px;color:var(--muted)}
+.row{display:flex;gap:8px;align-items:center}
+.switch{color:var(--accent);cursor:pointer;font-weight:600}
+.msg{margin-top:8px;font-size:14px}
+.hidden{display:none}
+.note{font-size:12px;color:#cbd5e1}
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Register Card -->
+    <div class="card" id="registerCard">
+      <h2>Create Account</h2>
+      <p class="small">Username + Phone + Password দিয়ে অ্যাকাউন্ট তৈরি করুন।</p>
+
+      <label>Username</label>
+      <input id="reg_username" placeholder="Your name">
+
+      <label>Phone</label>
+      <input id="reg_phone" placeholder="+8801XXXXXXXXX" type="tel">
+
+      <label>Password</label>
+      <input id="reg_pass" placeholder="Password" type="password">
+
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="note">Account created by you; admin also can create users in admin panel.</div>
+        <button class="btn" id="regBtn">Create Account</button>
+      </div>
+
+      <p id="regMsg" class="msg"></p>
+      <hr style="border:none;border-top:1px dashed rgba(255,255,255,0.06);margin:12px 0">
+      <p class="small">Already have an account? <span class="switch" id="toLogin">Login here</span></p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="card hidden" id="loginCard">
+      <h2>Login</h2>
+      <p class="small">Phone + Password দিয়ে লগইন করুন।</p>
+
+      <label>Phone</label>
+      <input id="login_phone" placeholder="+8801XXXXXXXXX" type="tel">
+
+      <label>Password</label>
+      <input id="login_pass" placeholder="Password" type="password">
+
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <label style="font-size:13px"><input id="remember" type="checkbox" style="margin-right:8px">Remember me</label>
+        <button class="btn" id="loginBtn">Login</button>
+      </div>
+
+      <p id="loginMsg" class="msg"></p>
+      <hr style="border:none;border-top:1px dashed rgba(255,255,255,0.06);margin:12px 0">
+      <p class="small">Admin? <a href="admin.html" style="color:var(--accent)">Open Admin Panel</a></p>
+      <p class="small">No account? <span class="switch" id="toRegister">Create account</span></p>
+    </div>
+
+  </div>
+
+<script>
+/*
+Simple demo using localStorage.
+Keys:
+ - ms_users : array [{username, phone, password, subscriptionUntil, createdAt, createdByUser/createdByAdmin}]
+ - ms_session : session stored in sessionStorage
+ - ms_remember : phone in localStorage
+*/
+
+// helpers
+const lsGet = k => JSON.parse(localStorage.getItem(k));
+const lsSet = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+const nowISO = ()=> new Date().toISOString();
+const addDaysISO = d => new Date(Date.now()+d*24*60*60*1000).toISOString();
+
+// UI elements
+const regCard = document.getElementById('registerCard');
+const loginCard = document.getElementById('loginCard');
+
+const regUser = document.getElementById('reg_username');
+const regPhone = document.getElementById('reg_phone');
+const regPass = document.getElementById('reg_pass');
+const regBtn = document.getElementById('regBtn');
+const regMsg = document.getElementById('regMsg');
+
+const loginPhone = document.getElementById('login_phone');
+const loginPass = document.getElementById('login_pass');
+const loginBtn = document.getElementById('loginBtn');
+const loginMsg = document.getElementById('loginMsg');
+const rememberCb = document.getElementById('remember');
+
+document.getElementById('toLogin').addEventListener('click', ()=>{ regCard.classList.add('hidden'); loginCard.classList.remove('hidden'); });
+document.getElementById('toRegister').addEventListener('click', ()=>{ loginCard.classList.add('hidden'); regCard.classList.remove('hidden'); });
+
+// init storage
+if(!localStorage.getItem('ms_users')) lsSet('ms_users', []);
+
+// Register handler
+regBtn.addEventListener('click', ()=>{
+  regMsg.textContent=''; regMsg.style.color='crimson';
+  const username = (regUser.value||'').trim();
+  const phone = (regPhone.value||'').trim();
+  const pass = (regPass.value||'').trim();
+  if(!username || !phone || !pass){ regMsg.textContent='সব ফিল্ড পূরণ করুন'; return; }
+  let users = lsGet('ms_users')||[];
+  if(users.find(u=>u.phone===phone)){ regMsg.textContent='এই ফোন নম্বর দিয়ে আগে থেকেই অ্যাকাউন্ট আছে'; return; }
+  users.push({ username, phone, password: pass, subscriptionUntil: null, createdAt: nowISO(), createdByUser: true });
+  lsSet('ms_users', users);
+  regMsg.style.color='lightgreen';
+  regMsg.textContent = 'Account created successfully — now go to Login.';
+  regUser.value=''; regPhone.value=''; regPass.value='';
+});
+
+// Login handler
+loginBtn.addEventListener('click', ()=>{
+  loginMsg.textContent=''; loginMsg.style.color='crimson';
+  const phone = (loginPhone.value||'').trim();
+  const pass = loginPass.value;
+  if(!phone || !pass){ loginMsg.textContent='সব ফিল্ড পূরণ করুন'; return; }
+  const users = lsGet('ms_users')||[];
+  const u = users.find(x => x.phone===phone && x.password===pass);
+  if(!u){ loginMsg.textContent='ভুল ফোন/পাসওয়ার্ড বা অ্যাকাউন্ট নেই'; return; }
+  // store session
+  sessionStorage.setItem('ms_session', JSON.stringify({ phone: u.phone, username: u.username }));
+  if(rememberCb.checked) localStorage.setItem('ms_remember', u.phone);
+  // redirect to dashboard
+  window.location.href = 'dashboard.html';
+});
+
+// restore remember
+window.addEventListener('DOMContentLoaded', ()=>{
+  const rm = localStorage.getItem('ms_remember');
+  if(rm) loginPhone.value = rm;
+});
+</script>
+</body>
+</html>

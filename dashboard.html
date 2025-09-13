@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>User Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      color: #333;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: #1e272e;
+      color: #f1f2f6;
+    }
+    header {
+      background: #4facfe;
+      color: #fff;
+      padding: 16px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    #toggleTheme {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 6px;
+      background: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+    main {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    .services {
+      margin-top: 20px;
+      padding: 16px;
+      background: #ecf0f1;
+      border-radius: 8px;
+    }
+    /* Premium Card */
+    .premium-card {
+      margin-top: 30px;
+      padding: 25px;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      border-radius: 16px;
+      color: #2c3e50;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .premium-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+    }
+    .premium-card h3 {
+      margin: 0;
+      font-size: 24px;
+      color: #d63031;
+    }
+    .premium-card p {
+      margin: 12px 0;
+      font-size: 16px;
+    }
+    .price-tag {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0984e3;
+      margin: 10px 0;
+    }
+    .premium-btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transition: background 0.3s, transform 0.2s;
+    }
+    .premium-btn:hover {
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+      transform: scale(1.05);
+    }
+    /* Contact */
+    .contact {
+      margin-top: 40px;
+      padding: 20px;
+      background: #f1f2f6;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .contact h3 { margin-top: 0; }
+    .contact a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #0984e3;
+      font-weight: bold;
+    }
+    /* Floating Chat Icon */
+    #chatIcon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0088cc;
+      color: white;
+      font-size: 28px;
+      padding: 14px 18px;
+      border-radius: 50%;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+    #chatIcon:hover { transform: scale(1.1); }
+  </style>
+</head>
+<body>
+  <header>
+    🌐 User Dashboard
+    <button id="toggleTheme">🌙 Dark/Light</button>
+  </header>
+
+  <main>
+    <h2>স্বাগতম!</h2>
+    <p>আপনি আপনার অ্যাকাউন্টে সফলভাবে লগইন করেছেন। নিচে আমাদের কিছু ফ্রি সার্ভিস এবং প্রিমিয়াম সার্ভিসের তথ্য দেওয়া হলো।</p>
+
+    <!-- মোট ইউজার সংখ্যা -->
+    <p id="userCount">বর্তমানে মোট ইউজার: 0</p>
+
+    <!-- ফ্রি সার্ভিস -->
+    <div class="services">
+      <h3>আমাদের ফ্রি সার্ভিস:</h3>
+      <ul>
+        <li>সাধারণ ইউজার অ্যাক্সেস</li>
+        <li>বেসিক তথ্য</li>
+        <li>ডেমো ড্যাশবোর্ড</li>
+      </ul>
+    </div>
+
+    <!-- প্রিমিয়াম সার্ভিস Card -->
+    <div class="premium-card">
+      <h3>🔥 প্রিমিয়াম সার্ভিস</h3>
+      <p>Facebook, WhatsApp, Telegram, Imo, 1xBet সহ বিভিন্ন OTP সার্ভিস পেতে হলে আমাদের পেইড সার্ভিস নিতে হবে।</p>
+      <div class="price-tag">📌 মাসিক চার্জ: 300 টাকা</div>
+      <p>💳 bKash Send Money করুন: <strong>+8801716286090</strong></p>
+      <p>📢 পেমেন্ট শেষে আপনার bKash নাম্বার এবং <strong>Screenshot</strong> পাঠাতে হবে নিচের Telegram এ।</p>
+      <a href="https://t.me/phycokiller420" target="_blank" class="premium-btn">📲 Telegram এ যোগাযোগ করুন</a>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact">
+      <h3>📞 Contact</h3>
+      <a href="https://t.me/phycokiller420" target="_blank">Telegram</a>
+      <a href="https://wa.me/8801716286090" target="_blank">WhatsApp</a>
+      <a href="mailto:youremail@example.com">Email</a>
+    </div>
+  </main>
+
+  <!-- Floating Telegram Icon -->
+  <a href="https://t.me/phycokiller420" target="_blank" id="chatIcon">💬</a>
+
+  <script>
+    // মোট ইউজার সংখ্যা দেখানো
+    function updateUserCount(){
+      const users = JSON.parse(localStorage.getItem('ms_users')) || [];
+      document.getElementById('userCount').innerText = "বর্তমানে মোট ইউজার: " + users.length;
+    }
+    updateUserCount();
+
+    // Dark/Light Mode Toggle
+    document.getElementById('toggleTheme').addEventListener('click', ()=>{
+      document.body.classList.toggle('dark');
+    });
+  </script>
+</body>
+</html>
